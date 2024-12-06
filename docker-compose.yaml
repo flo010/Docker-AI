@@ -1,0 +1,29 @@
+version: "3"
+
+volumes:
+    shared_volume:
+
+services:
+    nlpdeploy:
+        build:
+            context: ./03 - Deploy # Path to the directory where the Dockerfile for nlpdeploy is located
+        container_name: nlpdeploy
+        stdin_open: true
+        tty: true
+        ports:
+            - 5000:5000
+        volumes:
+            - shared_volume:/app/models # Shared volume
+            - ./03 - Deploy:/python # Mount the '03 - Deploy' folder to /python inside the container
+        command: python /python/app.py # Command to run the app in the container
+
+    nlptrain:
+        build:
+            context: ./01 - Train # Path to the directory where the Dockerfile for nlptrain is located
+        container_name: nlptrain
+        stdin_open: true
+        tty: true
+        volumes:
+            - shared_volume:/app/models # Shared volume
+            - ./01 - Train:/python # Mount the '01 - Train' folder to /python inside the container
+        command: python /python/train.py # Command to run the training script in the container

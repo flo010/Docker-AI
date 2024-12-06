@@ -1,0 +1,14 @@
+version: "3"
+
+volumes:
+    shared_volume:
+
+services:
+    nlptrain:
+        build: .
+        container_name: nlptrain
+        stdin_open: true
+        tty: true
+        volumes:
+            - shared_volume:/app/models
+            - .:/python
