@@ -1,33 +1,28 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Sentiment Analysis</title>
-</head>
-<body>
-
-	<header>
-		<div class="container">
-			<div id="brandname">
-				<h3 align="center">Sentiment Analysis Result</h3>
+	<head>
+		<title>Sentiment Analysis</title>
+	</head>
+	<body>
+		<header>
+			<div class="container">
+				<div id="brandname">
+					<h3 align="center">Home Pricing Prediction</h3>
+				</div>
+				<hr />
+				<br />
 			</div>
-		<hr/>
-		<br/>
+		</header>
+
+		<p style="color: blue; font-size: 20; text-align: center">
+			<b>Price</b>
+		</p>
+		<div class="results" align="center">
+			<h2>{{prediction}} $</h2>
+
+			<a href="..">
+				<input type="submit" value="Go Back.." />
+			</a>
 		</div>
-	</header>
-
-	<p style="color:blue;font-size:20;text-align: center;"><b>Sentiment</b></p>
-	<div class="results" align="center">
-		
-		{% if prediction == 1%}
-		<h2 style="color:red;">Negative</h2>
-		{% elif prediction == 0%}
-		<h2 style="color:blue;">Positive</h2>
-		{% endif %}
-		
-		<a href="..">
-		<input type="submit" value="Go Back..">
-		</a>
-	</div>
-
-</body>
+	</body>
 </html>

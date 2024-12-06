@@ -13,7 +13,7 @@ import time
 app = Flask(__name__)
 
 # Path to the model file
-MODEL_PATH = '/shared/models/linear_regression_model.pkl'
+MODEL_PATH = '/app/models/linear_regression_model.pkl'
 
 def remove_pattern(input_txt, pattern):
     '''
@@ -30,7 +30,7 @@ def remove_pattern(input_txt, pattern):
 
 @app.route('/')
 def home():
-    global cv, clf
+    global model
 
     # Check if the model file exists
     if not os.path.exists(MODEL_PATH):
@@ -39,7 +39,7 @@ def home():
     # Load the model if not already loaded
     if 'cv' not in globals() or 'clf' not in globals():
         with open(MODEL_PATH, 'rb') as f:
-            cv, clf = pickle.load(f)
+            model = pickle.load(f)
 
     return render_template('home.html')  # Load the home page
 
@@ -47,14 +47,18 @@ def home():
 def predict():
     if request.method == 'POST':
         message = request.form['message']
-        clean_test = remove_pattern(message, "@[\w]*")
-        tokenized_clean_test = clean_test.split()
-        stem_tokenized_clean_test = [stemmer.stem(i) for i in tokenized_clean_test]
-        message = ' '.join(stem_tokenized_clean_test)
-        data = [message]
-        data = cv.transform(data)
-        my_prediction = clf.predict(data)
-    return render_template('result.html', prediction=my_prediction)
+
+        try:
+            # Convert input to a numeric value (e.g., number of rooms)
+            number_of_rooms = float(message)
+        except ValueError:
+            return render_template('error.html', message="Invalid input! Please enter a numeric value.")
+
+        # Reshape input for prediction
+        input_data = [[number_of_rooms]]
+        prediction = model.predict(input_data)
+        print(prediction)
+        return render_template('result.html', prediction=prediction[0]*10)
 
 if __name__ == '__main__':
 
